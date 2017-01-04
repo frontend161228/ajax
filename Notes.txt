@@ -16,4 +16,57 @@ https://github.com/typicode/jsonplaceholder#how-to
 
 
 --------------------------------------------------
+CORS on ASP.NET
+http://enable-cors.org/server_aspnet.html
+
+ASP.NET Web API 2 supports CORS.
+To enable CORS support, add the Microsoft.AspNet.WebApi.Cors NuGet package to your project.
+
+
+Web API Server:
+// WebApiConfig.cs
+        public static void Register(HttpConfiguration config)
+        {
+            // ...
+            config.EnableCors();
+        }
+
+
+
+// Your Web API Controller:
+// using System.Web.Http.Cors;
+
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class DefaultController : ApiController
+    {
+        
+        public EventModel GetTime() {
+            EventModel result = new Controllers.EventModel {
+                type = "ping",
+                data = DateTime.Now.ToString()
+            };
+            
+            return result;
+        }
+
+    }
+
+    public class EventModel {
+        public string type { get; set; }
+        public string data { get; set; }
+    }
+
+
+
+Client:
+    <script>
+        $("#debug").click(function () {
+            $.getJSON("http://localhost:portNumber/api/controllerName", function (e) {
+                $("#debug").text(e.data);
+            });
+
+        })
+    </script>
+
+
 
